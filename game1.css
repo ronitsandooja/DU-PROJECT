@@ -1,0 +1,105 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  width: 100%;
+}
+.background {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url(ultimatebg.jpg);
+  justify-content: center;
+}
+#gameCanvas {
+  background: #fff;
+  border-radius: 25px;
+  padding: 10px;
+}
+
+#logo {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  z-index: 1;
+}
+nav {
+  width: 90%;
+  display: flex;
+  padding: 2% 6%;
+  justify-content: space-between;
+  align-items: center;
+}
+.logotxt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  z-index: 1;
+}
+.logotxt h1 {
+  color: #fff;
+  text-decoration: none;
+  font-size: 40px;
+  margin-left: 70px;
+}
+.nav-links {
+  flex: 1;
+  text-align: right;
+}
+.nav-links ul li {
+  list-style: none;
+  display: inline-block;
+  padding: 8px 12px;
+  position: relative;
+}
+.nav-links ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+}
+.nav-links ul li::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background: #ffffff;
+  display: block;
+  margin: auto;
+  transition: 0.5s;
+}
+.nav-links ul li:hover::after {
+  width: 100%;
+}
+
+.refresh {
+  width: 15vw;
+  height: 50px;
+  border-radius: 25px;
+  border: #2e5122;
+  margin-top: 5vw;
+  margin-bottom: 50px;
+}
+.refresh:hover {
+  background: #2e5122;
+  color: #fff;
+}
+
+.headiing{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    margin-top:5vw;
+    margin-bottom: 5vw;
+    h1{
+        color:#fff;
+    }
+    p{
+        color:#fff;
+    }
+}

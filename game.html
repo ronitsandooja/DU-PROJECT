@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drag & Drop in JavaScript</title>
+    <link rel="stylesheet" href="game.css" />
+    
+  </head>
+  <body>
+    <section class="container">
+      <div class="box">
+        <div class="image" draggable="true"></div>
+      </div>
+
+      <div class="boxcont">
+      <div class="box"></div>
+      <p class="para">Bio-Degradable</p>
+    </div>
+
+      <div class="boxcont">
+      <div class="box"></div>
+      <p class="para">Non-biodegradable</p>
+    </div>
+
+      <div class="boxcont">
+      <div class="box"></div>
+      <p class="para">Dry and Non-biodegradable</p>
+    </div>
+    
+      <button>
+        <h2>
+        Submit
+        </h2>
+      </button>
+    </section>
+
+
+    <script>
+      //DOM Elements
+const boxes = document.querySelectorAll(".box"),
+  image = document.querySelector(".image");
+  paragraph = document.querySelector(".para")
+
+//Loop through each boxes element
+boxes.forEach((box) => {
+  //When a draggable element dragged over a box element
+  box.addEventListener("dragover", (e) => {
+    e.preventDefault(); //Prevent default behaviour
+    box.classList.add("hovered");
+  });
+
+  //When a draggable element leaves box element
+  box.addEventListener("dragleave", () => {
+    box.classList.remove("hovered");
+  });
+
+  //When a draggable element is dropped on a box elemen
+  box.addEventListener("drop", () => {
+    box.appendChild(image);
+    box.classList.remove("hovered");
+  });
+});
+    </script>
+  </body>
+</html>

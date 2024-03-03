@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waste Truck Snake Game</title>
+    <link rel="stylesheet" href="game1.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      
+
+      <nav>
+        <div class="logotxt">
+          <a href="index.html"><img id="logo" src="iconn.jpg" /></a>
+          <h1>WASTE WISE WONDER</h1>
+        </div>
+        <div class="nav-links" id="navLinks">
+          <i class="fa-solid fa-xmark" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="game2.html">Game 2</a></li>
+            <li><a href="shopping.html">Shopping</a></li>
+          </ul>
+        </div>
+        <i class="fa-solid fa-bars" onclick="showMenu()"></i>
+      </nav>
+
+      <div class="headiing">
+        <h1>Game</h1>
+        <p>
+          This Game Uses A Truck as the green Object and the Garbage as of the
+          Black Object to implement a thinking among users to eliminate
+          collected garbage as soon as they see it.
+        </p>
+      </div>
+
+      <canvas id="gameCanvas" width="1000" height="600"></canvas>
+
+      <a href="game1.html"><button class="refresh">Refresh</button></a>
+    </div>
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      const blockSize = 20;
+      const widthInBlocks = canvas.width / blockSize;
+      const heightInBlocks = canvas.height / blockSize;
+
+      let score = 0;
+      let wasteTruck;
+      let garbageBag;
+
+      function init() {
+        wasteTruck = {
+          body: [{ x: 5, y: 10 }],
+          direction: "right",
+        };
+        createGarbageBag();
+        score = 0;
+      }
+
+      function createGarbageBag() {
+        garbageBag = {
+          x: Math.floor(Math.random() * widthInBlocks),
+          y: Math.floor(Math.random() * heightInBlocks),
+        };
+      }
+
+      function drawBlock(ctx, position) {
+        const x = position.x * blockSize;
+        const y = position.y * blockSize;
+        ctx.fillRect(x, y, blockSize, blockSize);
+      }
+
+      function drawWasteTruck() {
+        ctx.fillStyle = "#2E8B57"; // Green color for waste truck
+        wasteTruck.body.forEach((segment) => {
+          drawBlock(ctx, segment);
+        });
+      }
+
+      function drawGarbageBag() {
+        ctx.fillStyle = "#000000"; // Red color for garbage bag
+        drawBlock(ctx, garbageBag);
+      }
+
+      function drawScore() {
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#000";
+        ctx.textAlign = "left";
+        ctx.fillText("Garbage Collected: " + score, blockSize, blockSize);
+      }
+
+      function checkCollision(head, body) {
+        return body.some((segment) => {
+          return segment.x === head.x && segment.y === head.y;
+        });
+      }
+
+      function checkBoundaryCollision(head) {
+        return (
+          head.x < 0 ||
+          head.x >= widthInBlocks ||
+          head.y < 0 ||
+          head.y >= heightInBlocks
+        );
+      }
+
+      function moveWasteTruck() {
+        const head = Object.assign({}, wasteTruck.body[0]);
+        switch (wasteTruck.direction) {
+          case "up":
+            head.y -= 1;
+            break;
+          case "down":
+            head.y += 1;
+            break;
+          case "left":
+            head.x -= 1;
+            break;
+          case "right":
+            head.x += 1;
+            break;
+        }
+        if (
+          checkCollision(head, wasteTruck.body) ||
+          checkBoundaryCollision(head)
+        ) {
+          gameOver();
+          return;
+        }
+        wasteTruck.body.unshift(head);
+        if (head.x === garbageBag.x && head.y === garbageBag.y) {
+          score += 10;
+          createGarbageBag();
+        } else {
+          wasteTruck.body.pop();
+        }
+      }
+
+      function changeDirection(event) {
+        const keyPressed = event.keyCode;
+        const goingUp = wasteTruck.direction === "down";
+        const goingDown = wasteTruck.direction === "up";
+        const goingLeft = wasteTruck.direction === "right";
+        const goingRight = wasteTruck.direction === "left";
+
+        if (keyPressed === 37 && !goingRight) {
+          wasteTruck.direction = "left";
+        }
+        if (keyPressed === 38 && !goingDown) {
+          wasteTruck.direction = "up";
+        }
+        if (keyPressed === 39 && !goingLeft) {
+          wasteTruck.direction = "right";
+        }
+        if (keyPressed === 40 && !goingUp) {
+          wasteTruck.direction = "down";
+        }
+      }
+
+      function gameOver() {
+        ctx.font = "40px Arial";
+        ctx.fillStyle = "#000";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+        ctx.fillText(
+          "Garbage Collection Score: " + score,
+          canvas.width / 2,
+          canvas.height / 2 + 50
+        );
+        clearInterval(gameInterval);
+        document.removeEventListener("keydown", changeDirection);
+      }
+
+      function drawGame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawScore();
+        drawWasteTruck();
+        drawGarbageBag();
+        moveWasteTruck();
+      }
+
+      init();
+      const gameInterval = setInterval(drawGame, 120);
+      document.addEventListener("keydown", changeDirection);
+    </script>
+
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+  </body>
+</html>
